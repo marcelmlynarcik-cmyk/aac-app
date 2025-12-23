@@ -1,1 +1,29 @@
+{
+  "steps": [
+    {
+      "id": "osoba",
+      "title": "Kto?",
+      "items": [
+        { "text": "Ja", "img": "images/ja.png", "sound": "sounds/ja.mp3" },
+        { "text": "Ty", "img": "images/ty.png", "sound": "sounds/ty.mp3" }
+      ]
+    },
+    {
+      "id": "sloveso",
+      "title": "Čo robím?",
+      "items": [
+        { "text": "chcem", "img": "images/chcem.png", "sound": "sounds/chcem.mp3" },
+        { "text": "vidím", "img": "images/vidim.png", "sound": "sounds/vidim.mp3" }
+      ]
+    },
+    {
+      "id": "predmet",
+      "title": "Čo?",
+      "items": [
+        { "text": "auto", "img": "images/auto.png", "sound": "sounds/auto.mp3" },
+        { "text": "vodu", "img": "images/voda.png", "sound": "sounds/voda.mp3" }
+      ]
+    }
+  ]
+}
 

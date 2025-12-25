@@ -1,76 +1,51 @@
-function speak(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "cs-CZ";
-  utterance.rate = 0.9;   // pomalšie, lepšie pre deti
-  speechSynthesis.cancel(); // zastaví predchádzajúci hlas
-  speechSynthesis.speak(utterance);
-}
+let mode = "chci"; // alebo "nechci"
+let selectedCard = null;
 
+const sentenceEl = document.querySelector(".sentence");
+const cards = document.querySelectorAll(".card");
+const btnChci = document.querySelector(".choice.yes");
+const btnNechci = document.querySelector(".choice.no");
+const resetBtn = document.querySelector(".reset");
 
-let steps = [];
-let stepIndex = 0;
-let sentence = [];
+// --- MODE ---
+btnChci.addEventListener("click", () => {
+  mode = "chci";
+  btnChci.classList.add("active");
+  btnNechci.classList.remove("active");
+  updateSentence();
+});
 
-const titleEl = document.getElementById("title");
-const cardsEl = document.getElementById("cards");
-const sentenceEl = document.getElementById("sentence");
-const resetBtn = document.getElementById("reset");
+btnNechci.addEventListener("click", () => {
+  mode = "nechci";
+  btnNechci.classList.add("active");
+  btnChci.classList.remove("active");
+  updateSentence();
+});
 
-fetch("data.json")
-  .then(r => r.json())
-  .then(data => {
-    steps = data.steps;
-    render();
+// --- KARTY ---
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    cards.forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+    selectedCard = card;
+    updateSentence();
   });
+});
 
-function render() {
-  cardsEl.innerHTML = "";
+// --- RESET ---
+resetBtn.addEventListener("click", () => {
+  mode = "chci";
+  selectedCard = null;
+  sentenceEl.textContent = "";
+  cards.forEach(c => c.classList.remove("active"));
+});
 
- if (stepIndex >= steps.length) {
-  titleEl.innerText = "Věta";
+// --- VETA ---
+function updateSentence() {
+  if (!selectedCard) return;
 
-  const fullSentence = sentence.join(" ");
-  sentenceEl.innerText = fullSentence;
+  const word = selectedCard.dataset.form;
+  const verb = mode === "chci" ? "Chci" : "Nechci";
 
-  setTimeout(() => {
-    speak(fullSentence);
-  }, 500); // rovnaké tempo ako medzi kartami
-
-  return;
+  sentenceEl.textContent = `${verb} ${word}`;
 }
-
-
-  const step = steps[stepIndex];
-  titleEl.innerText = step.title;
-
-  step.items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-  <div class="icon">${item.icon}</div>
-  <div class="text">${item.text}</div>
-`;
-
-
-    card.onclick = () => {
-  speak(item.text);
-
-  setTimeout(() => {
-    sentence.push(item.text);
-    stepIndex++;
-    render();
-  }, 1000); // 300 ms = ideálne oneskorenie pre deti
-};
-
-
-
-    cardsEl.appendChild(card);
-  });
-}
-
-resetBtn.onclick = () => {
-  stepIndex = 0;
-  sentence = [];
-  sentenceEl.innerText = "";
-  render();
-};

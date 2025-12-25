@@ -154,3 +154,7 @@ button {
     min-width: 180px;
   }
 }
+.card.active {
+  outline: 4px solid #007aff;
+  background: #eaf3ff;
+}

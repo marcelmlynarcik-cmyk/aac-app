@@ -1,22 +1,31 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <title>AAC aplikace</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
+  <div class="app">
 
-  <h1 id="title">Načítám…</h1>
+    <!-- VETA -->
+    <div class="sentence">
+      Chci jablko
+    </div>
 
-  <div id="cards"></div>
+    <!-- CHCI / NECHCI -->
+    <div class="choices">
+      <button class="choice yes">CHCI</button>
+      <button class="choice no">NECHCI</button>
+    </div>
 
-  <div id="sentence"></div>
+    <!-- MRIEŽKA SLOV -->
+    <div class="grid">
+      <button class="card">🍎<span>Jablko</span></button>
+      <button class="card">🍌<span>Banán</span></button>
+      <button class="card">💧<span>Voda</span></button>
+      <button class="card">🍽️<span>Jíst</span></button>
+      <button class="card">🚽<span>WC</span></button>
+      <button class="card">🛏️<span>Spát</span></button>
+    </div>
 
-  <button id="reset">Reset</button>
+    <!-- RESET -->
+    <div class="footer">
+      <button class="reset">Reset</button>
+    </div>
 
-  <script src="app.js"></script>
+  </div>
 </body>
-</html>

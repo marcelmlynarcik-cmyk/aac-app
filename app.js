@@ -44,20 +44,17 @@ btnNechci.addEventListener("click", () => {
 cards.forEach(card => {
   card.addEventListener("click", () => {
 
-    // vizuálne zvýraznenie (to už máš)
+    // zvýraznenie karty
     cards.forEach(c => c.classList.remove("active"));
     card.classList.add("active");
 
     selectedCard = card;
 
-    // 1️⃣ povedz LEN slovo
-    const word = card.dataset.form;
-    speak(word);
-
-    // 2️⃣ aktualizuj vetu (bez hovorenia)
+    // LEN aktualizácia vety
     updateSentence();
   });
 });
+
 
 
 // --- RESET ---
@@ -82,11 +79,12 @@ function updateSentence() {
 
   const word = selectedCard.dataset.form;
   const verb = mode === "chci" ? "Chci" : "Nechci";
-
   const fullSentence = `${verb} ${word}`;
+
   sentenceEl.textContent = fullSentence;
 
-  // 2️⃣ po krátkej pauze povedz CELÚ vetu
-  speak(fullSentence, 800);
+  // 🔊 povieme IBA CELÚ vetu
+  speak(fullSentence, 500);
 }
+
 

@@ -38,13 +38,19 @@ body {
 .choices {
   display: flex;
   gap: 12px;
+  justify-content: center;   /* CENTROVANIE */
 }
 
+
 .choice {
-  padding: 12px;
-  font-size: 18px;
-  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 14px;
+  border: none;
+  min-width: 140px;   /* aby neboli úzke */
 }
+
 
 
 .choice.yes {
@@ -128,3 +134,23 @@ button {
   touch-action: manipulation;
 }
 
+@media (min-width: 768px) {
+  .choices {
+    margin-bottom: 8px;
+  }
+
+  .choice {
+    font-size: 22px;
+    min-width: 180px;
+  }
+}
+@media (min-width: 768px) {
+  .choices {
+    margin-bottom: 8px;
+  }
+
+  .choice {
+    font-size: 22px;
+    min-width: 180px;
+  }
+}

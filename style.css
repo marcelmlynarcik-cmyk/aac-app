@@ -62,9 +62,10 @@ body {
 /* MRIEŽKA */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr); /* iPhone default */
+  gap: 14px;
 }
+
 
 .card {
   background: white;
@@ -96,3 +97,25 @@ body {
   font-size: 18px;
   border-radius: 12px;
 }
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card {
+    font-size: 56px;
+  }
+
+  .sentence {
+    font-size: 32px;
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+button {
+  touch-action: manipulation;
+}
+

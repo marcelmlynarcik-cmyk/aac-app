@@ -158,3 +158,6 @@ button {
   outline: 4px solid #007aff;
   background: #eaf3ff;
 }
+.choice.active {
+  box-shadow: 0 0 0 4px #000;
+}

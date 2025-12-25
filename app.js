@@ -12,17 +12,22 @@ const resetBtn = document.querySelector(".reset");
 // --- MODE ---
 btnChci.addEventListener("click", () => {
   mode = "chci";
+
   btnChci.classList.add("active");
   btnNechci.classList.remove("active");
+
   updateSentence();
 });
 
 btnNechci.addEventListener("click", () => {
   mode = "nechci";
+
   btnNechci.classList.add("active");
   btnChci.classList.remove("active");
+
   updateSentence();
 });
+
 
 // --- KARTY ---
 cards.forEach(card => {

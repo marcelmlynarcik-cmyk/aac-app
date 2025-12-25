@@ -1,4 +1,6 @@
-let mode = "chci"; // alebo "nechci"
+
+
+let mode = null;        // ŽIADNE chci / nechci na začiatku
 let selectedCard = null;
 
 const sentenceEl = document.querySelector(".sentence");
@@ -34,15 +36,24 @@ cards.forEach(card => {
 
 // --- RESET ---
 resetBtn.addEventListener("click", () => {
-  mode = "chci";
+  mode = null;
   selectedCard = null;
   sentenceEl.textContent = "";
+
+  btnChci.classList.remove("active");
+  btnNechci.classList.remove("active");
+
   cards.forEach(c => c.classList.remove("active"));
 });
 
+
 // --- VETA ---
 function updateSentence() {
-  if (!selectedCard) return;
+  if (!mode || !selectedCard) {
+  sentenceEl.textContent = "";
+  return;
+}
+
 
   const word = selectedCard.dataset.form;
   const verb = mode === "chci" ? "Chci" : "Nechci";

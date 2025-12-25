@@ -1,29 +1,25 @@
 {
   "steps": [
     {
-      "id": "osoba",
-      "title": "Kto?",
+      "title": "Kdo?",
       "items": [
-        { "text": "Ja", "img": "images/ja.png", "sound": "sounds/ja.mp3" },
-        { "text": "Ty", "img": "images/ty.png", "sound": "sounds/ty.mp3" }
+        { "text": "Já", "icon": "👦" },
+        { "text": "Ty", "icon": "👉" }
       ]
     },
     {
-      "id": "sloveso",
-      "title": "Čo robím?",
+      "title": "Co dělám?",
       "items": [
-        { "text": "chcem", "img": "images/chcem.png", "sound": "sounds/chcem.mp3" },
-        { "text": "vidím", "img": "images/vidim.png", "sound": "sounds/vidim.mp3" }
+        { "text": "Chci", "icon": "🙏" },
+        { "text": "Vidím", "icon": "👀" }
       ]
     },
     {
-      "id": "predmet",
-      "title": "Čo?",
+      "title": "Co?",
       "items": [
-        { "text": "auto", "img": "images/auto.png", "sound": "sounds/auto.mp3" },
-        { "text": "vodu", "img": "images/voda.png", "sound": "sounds/voda.mp3" }
+        { "text": "Auto", "icon": "🚗" },
+        { "text": "Vodu", "icon": "💧" }
       ]
     }
   ]
 }
-

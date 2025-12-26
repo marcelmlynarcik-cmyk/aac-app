@@ -47,7 +47,7 @@
       "id": "needs",
       "label": "Potřeby",
       "icon": "🚽",
-      "mode": "statement",
+      "mode": "want",
       "items": [
         { "id": "wc", "text": "na záchod", "icon": "🚽" },
         { "id": "spat", "text": "spát", "icon": "🛏️" },
@@ -83,13 +83,13 @@
       "icon": "😊",
       "mode": "statement",
       "items": [
-        { "id": "rad", "text": "jsem rád", "icon": "😊" },
-        { "id": "nerad", "text": "se mi nelíbí", "icon": "🙁" },
-        { "id": "nastvany", "text": "jsem naštvaný", "icon": "😠" },
-        { "id": "smutny", "text": "jsem smutný", "icon": "😢" },
-        { "id": "unaveny", "text": "jsem unavený", "icon": "😴" },
-        { "id": "bojim", "text": "bojím se", "icon": "😨" },
-        { "id": "tesim", "text": "těším se", "icon": "🤩" }
+        { "id": "rad", "text": "Jsem rád", "icon": "😊" },
+        { "id": "nerad", "text": "To se mi nelíbí", "icon": "🙁" },
+        { "id": "nastvany", "text": "Jsem naštvaný", "icon": "😠" },
+        { "id": "smutny", "text": "Jsem smutný", "icon": "😢" },
+        { "id": "unaveny", "text": "Jsem unavený", "icon": "😴" },
+        { "id": "bojim", "text": "Bojím se", "icon": "😨" },
+        { "id": "tesim", "text": "Těším se", "icon": "🤩" }
       ]
     }
   ]

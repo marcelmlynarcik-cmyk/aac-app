@@ -42,13 +42,23 @@ function renderGrid() {
     card.className = "card";
     card.innerHTML = `${item.icon}<span>${item.text}</span>`;
 
-    card.onclick = () => onItemClick(item);
+    card.onclick = () => {
+      document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+
+      selectedCard = {
+        text: item.text,
+        form: item.text
+      };
+
+      updateSentence();
+    };
 
     gridEl.appendChild(card);
   });
 }
-sentenceEl.textContent = `${mode === "yes" ? "Chci" : "Nechci"} ${item.text}`;
-speak(sentenceEl.textContent);
+
+
 
 
 const quickYes = document.querySelector(".quick.yes");
@@ -133,7 +143,8 @@ function updateSentence() {
     return;
   }
 
-  const word = selectedCard.dataset.form;
+  const word = selectedCard.form;
+
   const verb = mode === "chci" ? "Chci" : "Nechci";
   const fullSentence = `${verb} ${word}`;
 

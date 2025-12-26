@@ -30,22 +30,38 @@ function renderCategories() {
   data.categories.forEach(cat => {
     const btn = document.createElement("button");
     btn.className = "category-btn";
-    btn.textContent = cat.label;
-    btn.onclick = () => selectCategory(cat.id);
     btn.dataset.id = cat.id;
+
+    btn.innerHTML = `
+      <span class="icon">${cat.icon}</span>
+      <span>${cat.label}</span>
+    `;
+
+    btn.onclick = () => selectCategory(cat.id);
     categoriesEl.appendChild(btn);
   });
 }
 
-function selectCategory(id) {
-  currentCategory = data.categories.find(c => c.id === id);
 
+function selectCategory(id) {
   document.querySelectorAll(".category-btn").forEach(b =>
     b.classList.toggle("active", b.dataset.id === id)
   );
 
+  if (id === "all") {
+    // VŠE = všetky položky zo všetkých kategórií
+    const allItems = data.categories
+      .filter(c => c.id !== "all")
+      .flatMap(c => c.items);
+
+    currentCategory = { items: allItems };
+  } else {
+    currentCategory = data.categories.find(c => c.id === id);
+  }
+
   renderGrid();
 }
+
 
 // === GRID ===
 function renderGrid() {

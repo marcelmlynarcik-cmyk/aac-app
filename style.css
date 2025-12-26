@@ -135,3 +135,12 @@ body {
 @media (min-width: 1200px) {
   .grid { grid-template-columns: repeat(6, 1fr); }
 }
+.category-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.category-btn span.icon {
+  font-size: 18px;
+}

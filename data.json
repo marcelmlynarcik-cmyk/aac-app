@@ -53,8 +53,6 @@
         { "id": "spat", "text": "spát", "icon": "🛏️" },
         { "id": "boli", "text": "to bolí", "icon": "🤕" },
         { "id": "odpo", "text": "odpočinek", "icon": "🧘" },
-        { "id": "teplo", "text": "je mi teplo", "icon": "🥵" },
-        { "id": "zima", "text": "je mi zima", "icon": "🥶" },
         { "id": "umy", "text": "umýt ruce", "icon": "🧼" },
         { "id": "pomoc", "text": "pomoc", "icon": "🆘" }
       ]
@@ -90,7 +88,27 @@
         { "id": "unaveny", "text": "Jsem unavený", "icon": "😴" },
         { "id": "bojim", "text": "Bojím se", "icon": "😨" },
         { "id": "tesim", "text": "Těším se", "icon": "🤩" }
+        ,
+        { "id": "teplo", "text": "je mi teplo", "icon": "🥵" },
+        { "id": "zima", "text": "je mi zima", "icon": "🥶" }
+
       ]
-    }
+    },
+    {
+  "id": "family",
+  "label": "Rodina",
+  "icon": "👨‍👩‍👧",
+  "mode": "want",
+  "items": [
+    { "id": "maminka", "text": "maminku", "icon": "👩" },
+    { "id": "tatinek", "text": "tatínka", "icon": "👨" },
+    { "id": "eliska", "text": "Elišku", "icon": "👧" },
+    { "id": "babicka", "text": "babičku", "icon": "👵" },
+    { "id": "dedecek", "text": "dědečka", "icon": "👴" },
+    { "id": "teta", "text": "tetu", "icon": "👩‍🦰" },
+    { "id": "strejda", "text": "strejdu", "icon": "👨‍🦱" }
   ]
 }
+  ]
+}
+

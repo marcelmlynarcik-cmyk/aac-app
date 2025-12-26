@@ -1,11 +1,3 @@
-body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
-
-
 * {
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
@@ -20,8 +12,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 12px;
   gap: 12px;
+  padding: 12px;
 }
 
 /* VETA */
@@ -34,133 +26,7 @@ body {
   text-align: center;
 }
 
-/* CHCI / NECHCI */
-.choices {
-  display: flex;
-  gap: 12px;
-  justify-content: center;   /* CENTROVANIE */
-}
-
-
-.choice {
-  padding: 14px 24px;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 14px;
-  border: none;
-  min-width: 140px;   /* aby neboli úzke */
-}
-
-
-
-.choice.yes {
-  background: #4CAF50;
-  color: white;
-}
-
-.choice.no {
-  background: #F44336;
-  color: white;
-}
-
-/* MRIEŽKA */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* namiesto 2 */
-  gap: 12px;
-}
-
-
-
-.card {
-  background: white;
-  border-radius: 14px;
-  padding: 10px;
-  border: none;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 36px;   /* emoji */
-}
-
-
-.card span {
-  margin-top: 6px;
-  font-size: 15px;
-}
-
-
-/* FOOTER */
-.footer {
-  margin-top: auto;
-  text-align: center;
-}
-
-.reset {
-  background: #ccc;
-  border: none;
-  padding: 12px 24px;
-  font-size: 18px;
-  border-radius: 12px;
-}
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .card {
-    font-size: 32px;
-  }
-
-  .card span {
-    font-size: 14px;
-  }
-
-  .sentence {
-    font-size: 28px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-button {
-  touch-action: manipulation;
-}
-
-@media (min-width: 768px) {
-  .choices {
-    margin-bottom: 8px;
-  }
-
-  .choice {
-    font-size: 22px;
-    min-width: 180px;
-  }
-}
-@media (min-width: 768px) {
-  .choices {
-    margin-bottom: 8px;
-  }
-
-  .choice {
-    font-size: 22px;
-    min-width: 180px;
-  }
-}
-.card.active {
-  outline: 4px solid #007aff;
-  background: #eaf3ff;
-}
-.choice.active {
-  box-shadow: 0 0 0 4px #000;
-}
+/* QUICK */
 .quick-answers {
   display: flex;
   justify-content: center;
@@ -170,43 +36,102 @@ button {
 .quick {
   padding: 12px 20px;
   font-size: 18px;
-  font-weight: bold;
   border-radius: 14px;
   border: none;
-  background: #ddd;
+  font-weight: bold;
 }
 
-.quick.yes {
-  background: #2ecc71;
-  color: white;
+.quick.yes { background: #2ecc71; color: white; }
+.quick.no  { background: #e74c3c; color: white; }
+.quick.active { box-shadow: 0 0 0 4px rgba(0,0,0,0.25); }
+
+/* CHCI / NECHCI */
+.choices {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
-.quick.no {
-  background: #e74c3c;
-  color: white;
+.choice {
+  padding: 14px 24px;
+  font-size: 20px;
+  border-radius: 14px;
+  border: none;
+  font-weight: bold;
+  min-width: 140px;
 }
 
-.quick.active {
-  box-shadow: 0 0 0 4px rgba(0,0,0,0.25);
-}
+.choice.yes { background: #4CAF50; color: white; }
+.choice.no  { background: #F44336; color: white; }
+.choice.active { box-shadow: 0 0 0 4px black; }
+
+/* KATEGÓRIE */
 .categories {
   display: flex;
-  gap: 12px;
-  padding: 10px 0;
+  gap: 10px;
   overflow-x: auto;
 }
 
 .category-btn {
   padding: 10px 16px;
   border-radius: 12px;
-  background: #e0e0e0;
+  background: #ddd;
   border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+  font-weight: bold;
 }
 
 .category-btn.active {
   background: #4a90e2;
   color: white;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 10px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 36px;
+}
+
+.card span {
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+.card.active {
+  outline: 4px solid #007aff;
+  background: #eaf3ff;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+.reset {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  background: #ccc;
+}
+
+/* RESPONSIVE */
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 1200px) {
+  .grid { grid-template-columns: repeat(6, 1fr); }
 }

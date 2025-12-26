@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
+  <title>AAC</title>
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="AAC">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#f2f2f7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#f2f2f7">
 </head>
 
 <body>
@@ -18,13 +18,12 @@
 
     <!-- VETA -->
     <div class="sentence"></div>
+
     <!-- RÝCHLA ODPOVEĎ -->
-<div class="quick-answers">
-  <button class="quick yes">ANO, CHCI</button>
-  <button class="quick no">NE, NECHCI</button>
-</div>
-
-
+    <div class="quick-answers">
+      <button class="quick yes">ANO, CHCI</button>
+      <button class="quick no">NE, NECHCI</button>
+    </div>
 
     <!-- CHCI / NECHCI -->
     <div class="choices">
@@ -33,15 +32,10 @@
     </div>
 
     <!-- KATEGÓRIE -->
-<div class="grid" id="grid"></div>
+    <div class="categories" id="categories"></div>
 
-
-    <!-- MRIEŽKA SLOV -->
+    <!-- MRIEŽKA -->
     <div class="grid" id="grid"></div>
-
-
-</div>
-
 
     <!-- RESET -->
     <div class="footer">
@@ -49,7 +43,7 @@
     </div>
 
   </div>
-  <script src="app.js"></script>
 
+  <script src="app.js"></script>
 </body>
 </html>

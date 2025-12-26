@@ -1,16 +1,29 @@
-let data = null;
-let currentCategory = null;
-
-fetch("data.json")
-  .then(res => res.json())
-  .then(json => {
-    data = json;
-    renderCategories();
-    selectCategory(data.categories[0].id); // prvá kategória
-  });
+// === ELEMENTY ===
+const sentenceEl = document.querySelector(".sentence");
+const btnChci = document.querySelector(".choice.yes");
+const btnNechci = document.querySelector(".choice.no");
+const quickYes = document.querySelector(".quick.yes");
+const quickNo = document.querySelector(".quick.no");
+const resetBtn = document.querySelector(".reset");
 const categoriesEl = document.getElementById("categories");
 const gridEl = document.getElementById("grid");
 
+// === STAV ===
+let data = null;
+let currentCategory = null;
+let mode = null;
+let selectedCard = null;
+
+// === LOAD DATA ===
+fetch("data.json")
+  .then(r => r.json())
+  .then(json => {
+    data = json;
+    renderCategories();
+    selectCategory(data.categories[0].id);
+  });
+
+// === KATEGÓRIE ===
 function renderCategories() {
   categoriesEl.innerHTML = "";
 
@@ -18,22 +31,23 @@ function renderCategories() {
     const btn = document.createElement("button");
     btn.className = "category-btn";
     btn.textContent = cat.label;
-
     btn.onclick = () => selectCategory(cat.id);
-
     btn.dataset.id = cat.id;
     categoriesEl.appendChild(btn);
   });
 }
-function selectCategory(catId) {
-  currentCategory = data.categories.find(c => c.id === catId);
 
-  document.querySelectorAll(".category-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.id === catId);
-  });
+function selectCategory(id) {
+  currentCategory = data.categories.find(c => c.id === id);
+
+  document.querySelectorAll(".category-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.id === id)
+  );
 
   renderGrid();
 }
+
+// === GRID ===
 function renderGrid() {
   gridEl.innerHTML = "";
 
@@ -45,12 +59,7 @@ function renderGrid() {
     card.onclick = () => {
       document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
       card.classList.add("active");
-
-      selectedCard = {
-        text: item.text,
-        form: item.text
-      };
-
+      selectedCard = item;
       updateSentence();
     };
 
@@ -58,132 +67,70 @@ function renderGrid() {
   });
 }
 
-
-
-
-const quickYes = document.querySelector(".quick.yes");
-const quickNo = document.querySelector(".quick.no");
-
-function speak(text, delay = 0) {
-  if (!text) return;
-
-  speechSynthesis.cancel();
-
-  setTimeout(() => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "cs-CZ";
-    utterance.rate = 0.9;   // príjemné pre deti
-    utterance.pitch = 1;
-
-    speechSynthesis.speak(utterance);
-  }, delay);
-}
-
-
-let mode = null;        // ŽIADNE chci / nechci na začiatku
-let selectedCard = null;
-
-const sentenceEl = document.querySelector(".sentence");
-const cards = document.querySelectorAll(".card");
-const btnChci = document.querySelector(".choice.yes");
-const btnNechci = document.querySelector(".choice.no");
-const resetBtn = document.querySelector(".reset");
-
-// --- MODE ---
-btnChci.addEventListener("click", () => {
+// === MODE ===
+btnChci.onclick = () => {
   mode = "chci";
   btnChci.classList.add("active");
   btnNechci.classList.remove("active");
   updateSentence();
-});
+};
 
-btnNechci.addEventListener("click", () => {
+btnNechci.onclick = () => {
   mode = "nechci";
   btnNechci.classList.add("active");
   btnChci.classList.remove("active");
   updateSentence();
-});
+};
 
-
-
-// --- KARTY ---
-cards.forEach(card => {
-  card.addEventListener("click", () => {
-
-    // zvýraznenie karty
-    cards.forEach(c => c.classList.remove("active"));
-    card.classList.add("active");
-
-    selectedCard = card;
-
-    // LEN aktualizácia vety
-    updateSentence();
-  });
-});
-
-
-
-// --- RESET ---
-resetBtn.addEventListener("click", () => {
-  mode = null;
-  selectedCard = null;
-  sentenceEl.textContent = "";
-
-  btnChci.classList.remove("active");
-  btnNechci.classList.remove("active");
-
-  cards.forEach(c => c.classList.remove("active"));
-});
-
-
-// --- VETA ---
+// === VETA ===
 function updateSentence() {
   if (!mode || !selectedCard) {
     sentenceEl.textContent = "";
     return;
   }
 
-  const word = selectedCard.form;
-
-  const verb = mode === "chci" ? "Chci" : "Nechci";
-  const fullSentence = `${verb} ${word}`;
-
-  sentenceEl.textContent = fullSentence;
-
-  // 🔊 povieme IBA CELÚ vetu
-  speak(fullSentence, 500);
+  const text = `${mode === "chci" ? "Chci" : "Nechci"} ${selectedCard.text}`;
+  sentenceEl.textContent = text;
+  speak(text, 500);
 }
 
-quickYes.addEventListener("click", () => {
-  clearSelection();
-
-  const text = "Ano, chci";
-  sentenceEl.textContent = text;
-  speak(text);
-
+// === QUICK ===
+quickYes.onclick = () => {
+  clearAll();
+  sentenceEl.textContent = "Ano, chci";
+  speak("Ano, chci");
   quickYes.classList.add("active");
-  quickNo.classList.remove("active");
-});
-quickNo.addEventListener("click", () => {
-  clearSelection();
+};
 
-  const text = "Ne, nechci";
-  sentenceEl.textContent = text;
-  speak(text);
-
+quickNo.onclick = () => {
+  clearAll();
+  sentenceEl.textContent = "Ne, nechci";
+  speak("Ne, nechci");
   quickNo.classList.add("active");
-  quickYes.classList.remove("active");
-});
-function clearSelection() {
+};
+
+// === RESET ===
+resetBtn.onclick = clearAll;
+
+function clearAll() {
   mode = null;
   selectedCard = null;
+  sentenceEl.textContent = "";
 
   btnChci.classList.remove("active");
   btnNechci.classList.remove("active");
-
   quickYes.classList.remove("active");
   quickNo.classList.remove("active");
-
-  cards.forEach(c => c.classList.remove("active"));
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
 }
 
+// === TTS ===
+function speak(text, delay = 0) {
+  speechSynthesis.cancel();
+  setTimeout(() => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "cs-CZ";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }, delay);
+}

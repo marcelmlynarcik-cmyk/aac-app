@@ -1,3 +1,6 @@
+const quickYes = document.querySelector(".quick.yes");
+const quickNo = document.querySelector(".quick.no");
+
 function speak(text, delay = 0) {
   if (!text) return;
 
@@ -87,4 +90,36 @@ function updateSentence() {
   speak(fullSentence, 500);
 }
 
+quickYes.addEventListener("click", () => {
+  clearSelection();
+
+  const text = "Ano, chci";
+  sentenceEl.textContent = text;
+  speak(text);
+
+  quickYes.classList.add("active");
+  quickNo.classList.remove("active");
+});
+quickNo.addEventListener("click", () => {
+  clearSelection();
+
+  const text = "Ne, nechci";
+  sentenceEl.textContent = text;
+  speak(text);
+
+  quickNo.classList.add("active");
+  quickYes.classList.remove("active");
+});
+function clearSelection() {
+  mode = null;
+  selectedCard = null;
+
+  btnChci.classList.remove("active");
+  btnNechci.classList.remove("active");
+
+  quickYes.classList.remove("active");
+  quickNo.classList.remove("active");
+
+  cards.forEach(c => c.classList.remove("active"));
+}
 

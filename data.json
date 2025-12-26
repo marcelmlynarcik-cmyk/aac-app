@@ -6,30 +6,84 @@
       "icon": "⭐",
       "items": []
     },
+
     {
       "id": "food",
       "label": "Jídlo",
       "icon": "🍎",
       "items": [
         { "id": "jablko", "text": "jablko", "icon": "🍎" },
-        { "id": "banan", "text": "banán", "icon": "🍌" }
+        { "id": "banan", "text": "banán", "icon": "🍌" },
+        { "id": "chleba", "text": "chleba", "icon": "🍞" },
+        { "id": "rohlik", "text": "rohlík", "icon": "🥖" },
+        { "id": "jogurt", "text": "jogurt", "icon": "🥣" },
+        { "id": "polevka", "text": "polévku", "icon": "🍲" },
+        { "id": "testoviny", "text": "těstoviny", "icon": "🍝" },
+        { "id": "ryze", "text": "rýži", "icon": "🍚" },
+        { "id": "maso", "text": "maso", "icon": "🍗" },
+        { "id": "susenk", "text": "sušenku", "icon": "🍪" }
       ]
     },
+
     {
       "id": "drink",
       "label": "Pití",
       "icon": "💧",
       "items": [
-        { "id": "voda", "text": "vodu", "icon": "💧" }
+        { "id": "voda", "text": "vodu", "icon": "💧" },
+        { "id": "dzus", "text": "džus", "icon": "🧃" },
+        { "id": "caj", "text": "čaj", "icon": "🍵" },
+        { "id": "mleko", "text": "mléko", "icon": "🥛" },
+        { "id": "kakao", "text": "kakao", "icon": "☕" },
+        { "id": "limonada", "text": "limonádu", "icon": "🥤" },
+        { "id": "bez", "text": "pití", "icon": "🚫" }
       ]
     },
+
     {
       "id": "needs",
       "label": "Potřeby",
       "icon": "🚽",
       "items": [
         { "id": "wc", "text": "na záchod", "icon": "🚽" },
-        { "id": "spat", "text": "spát", "icon": "🛏️" }
+        { "id": "spat", "text": "spát", "icon": "🛏️" },
+        { "id": "boli", "text": "to bolí", "icon": "🤕" },
+        { "id": "odpo", "text": "odpočinek", "icon": "🧘" },
+        { "id": "teplo", "text": "je mi teplo", "icon": "🥵" },
+        { "id": "zima", "text": "je mi zima", "icon": "🥶" },
+        { "id": "umy", "text": "umýt ruce", "icon": "🧼" },
+        { "id": "pomoc", "text": "pomoc", "icon": "🆘" }
+      ]
+    },
+
+    {
+      "id": "activities",
+      "label": "Činnosti",
+      "icon": "🎮",
+      "items": [
+        { "id": "hrat", "text": "si hrát", "icon": "🎮" },
+        { "id": "malovat", "text": "malovat", "icon": "🎨" },
+        { "id": "koukat", "text": "koukat na pohádku", "icon": "📺" },
+        { "id": "jitven", "text": "jít ven", "icon": "🌳" },
+        { "id": "cist", "text": "číst", "icon": "📖" },
+        { "id": "hudba", "text": "poslouchat hudbu", "icon": "🎵" },
+        { "id": "tablet", "text": "tablet", "icon": "📱" },
+        { "id": "auto", "text": "jezdit autem", "icon": "🚗" }
+      ]
+    },
+
+    {
+      "id": "feelings",
+      "label": "Pocity",
+      "icon": "😊",
+      "items": [
+        { "id": "rad", "text": "jsem rád", "icon": "😊" },
+        { "id": "nerad", "text": "se mi nelíbí", "icon": "🙁" },
+        { "id": "nastvany", "text": "jsem naštvaný", "icon": "😠" },
+        { "id": "smutny", "text": "jsem smutný", "icon": "😢" },
+        { "id": "unaveny", "text": "jsem unavený", "icon": "😴" },
+        { "id": "bojim", "text": "bojím se", "icon": "😨" },
+        { "id": "tesim", "text": "těším se", "icon": "🤩" }
       ]
     }
   ]

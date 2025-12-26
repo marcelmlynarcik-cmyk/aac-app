@@ -67,10 +67,11 @@ body {
 
 /* KATEGÓRIE */
 .categories {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  overflow-x: auto;
 }
+
 
 .category-btn {
   padding: 10px 16px;

@@ -4,6 +4,7 @@
       "id": "all",
       "label": "Vše",
       "icon": "⭐",
+      "mode": "mixed",
       "items": []
     },
 
@@ -11,6 +12,7 @@
       "id": "food",
       "label": "Jídlo",
       "icon": "🍎",
+      "mode": "want",
       "items": [
         { "id": "jablko", "text": "jablko", "icon": "🍎" },
         { "id": "banan", "text": "banán", "icon": "🍌" },
@@ -29,6 +31,7 @@
       "id": "drink",
       "label": "Pití",
       "icon": "💧",
+      "mode": "want",
       "items": [
         { "id": "voda", "text": "vodu", "icon": "💧" },
         { "id": "dzus", "text": "džus", "icon": "🧃" },
@@ -44,6 +47,7 @@
       "id": "needs",
       "label": "Potřeby",
       "icon": "🚽",
+      "mode": "statement",
       "items": [
         { "id": "wc", "text": "na záchod", "icon": "🚽" },
         { "id": "spat", "text": "spát", "icon": "🛏️" },
@@ -60,6 +64,7 @@
       "id": "activities",
       "label": "Činnosti",
       "icon": "🎮",
+      "mode": "want",
       "items": [
         { "id": "hrat", "text": "si hrát", "icon": "🎮" },
         { "id": "malovat", "text": "malovat", "icon": "🎨" },
@@ -76,6 +81,7 @@
       "id": "feelings",
       "label": "Pocity",
       "icon": "😊",
+      "mode": "statement",
       "items": [
         { "id": "rad", "text": "jsem rád", "icon": "😊" },
         { "id": "nerad", "text": "se mi nelíbí", "icon": "🙁" },

@@ -1,3 +1,56 @@
+let data = null;
+let currentCategory = null;
+
+fetch("data.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    renderCategories();
+    selectCategory(data.categories[0].id); // prvá kategória
+  });
+const categoriesEl = document.getElementById("categories");
+const gridEl = document.getElementById("grid");
+
+function renderCategories() {
+  categoriesEl.innerHTML = "";
+
+  data.categories.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "category-btn";
+    btn.textContent = cat.label;
+
+    btn.onclick = () => selectCategory(cat.id);
+
+    btn.dataset.id = cat.id;
+    categoriesEl.appendChild(btn);
+  });
+}
+function selectCategory(catId) {
+  currentCategory = data.categories.find(c => c.id === catId);
+
+  document.querySelectorAll(".category-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.id === catId);
+  });
+
+  renderGrid();
+}
+function renderGrid() {
+  gridEl.innerHTML = "";
+
+  currentCategory.items.forEach(item => {
+    const card = document.createElement("button");
+    card.className = "card";
+    card.innerHTML = `${item.icon}<span>${item.text}</span>`;
+
+    card.onclick = () => onItemClick(item);
+
+    gridEl.appendChild(card);
+  });
+}
+sentenceEl.textContent = `${mode === "yes" ? "Chci" : "Nechci"} ${item.text}`;
+speak(sentenceEl.textContent);
+
+
 const quickYes = document.querySelector(".quick.yes");
 const quickNo = document.querySelector(".quick.no");
 

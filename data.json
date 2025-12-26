@@ -1,24 +1,26 @@
 {
-  "steps": [
+  "categories": [
     {
-      "title": "Kdo?",
+      "id": "food",
+      "label": "Jídlo",
       "items": [
-        { "text": "Já", "icon": "👦" },
-        { "text": "Ty", "icon": "👉" }
+        { "id": "jablko", "text": "jablko", "icon": "🍎" },
+        { "id": "banan", "text": "banán", "icon": "🍌" }
       ]
     },
     {
-      "title": "Co dělám?",
+      "id": "drink",
+      "label": "Pití",
       "items": [
-        { "text": "Chci", "icon": "🙏" },
-        { "text": "Vidím", "icon": "👀" }
+        { "id": "voda", "text": "vodu", "icon": "💧" }
       ]
     },
     {
-      "title": "Co?",
+      "id": "needs",
+      "label": "Potřeby",
       "items": [
-        { "text": "Auto", "icon": "🚗" },
-        { "text": "Vodu", "icon": "💧" }
+        { "id": "wc", "text": "na záchod", "icon": "🚽" },
+        { "id": "spat", "text": "spát", "icon": "🛏️" }
       ]
     }
   ]

@@ -145,3 +145,16 @@ body {
 .category-btn span.icon {
   font-size: 18px;
 }
+body.parent-mode {
+  background: #fff6e5;
+}
+
+body.parent-mode .card {
+  opacity: 0.6;
+}
+
+body.parent-mode .choices,
+body.parent-mode .quick-answers {
+  pointer-events: none;
+  opacity: 0.4;
+}

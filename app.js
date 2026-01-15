@@ -1,9 +1,29 @@
+let isParentMode = false;
 let data = null;
 let currentCategory = null;
 let mode = null;
 let selectedItem = null;
 
 const sentenceEl = document.querySelector(".sentence");
+let pressTimer = null;
+
+sentenceEl.addEventListener("touchstart", startPress);
+sentenceEl.addEventListener("mousedown", startPress);
+
+sentenceEl.addEventListener("touchend", cancelPress);
+sentenceEl.addEventListener("mouseup", cancelPress);
+sentenceEl.addEventListener("mouseleave", cancelPress);
+
+function startPress() {
+  pressTimer = setTimeout(() => {
+    toggleParentMode();
+  }, 2000); // 2 sekundy
+}
+
+function cancelPress() {
+  clearTimeout(pressTimer);
+}
+
 const categoriesEl = document.getElementById("categories");
 const gridEl = document.getElementById("grid");
 
@@ -165,3 +185,17 @@ function clearSelection() {
 }
 
 resetBtn.onclick = clearSelection;
+function toggleParentMode() {
+  isParentMode = !isParentMode;
+
+  document.body.classList.toggle("parent-mode", isParentMode);
+
+  sentenceEl.textContent = isParentMode
+    ? "Rodičovský režim"
+    : "";
+
+  if (isParentMode) {
+    speak("Rodičovský režim");
+  }
+}
+

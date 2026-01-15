@@ -158,3 +158,104 @@ body.parent-mode .quick-answers {
   pointer-events: none;
   opacity: 0.4;
 }
+
+/* Parent Mode */
+.parent-mode-controls {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f2f2f7;
+    z-index: 100;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+body.parent-mode .parent-mode-controls {
+    display: block;
+}
+
+.parent-mode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.parent-section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.parent-section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+#category-form, #item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#category-form input, #category-form select,
+#item-form input, #item-form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#category-form button, #item-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007aff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#category-form button:hover, #item-form button:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #ff3b30 !important;
+}
+
+.delete-btn:hover {
+    background-color: #c53026 !important;
+}
+
+#category-list, #item-list {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.list-item {
+    padding: 10px 15px;
+    background: #e9e9eb;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.list-item:hover {
+    background: #dcdce0;
+}
+.list-item.selected {
+    border-color: #007aff;
+    background-color: #d1e7ff;
+}
+

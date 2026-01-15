@@ -47,13 +47,32 @@ function speak(text, delay = 300) {
 }
 
 // ===== LOAD DATA =====
-fetch("data.json")
-  .then(res => res.json())
-  .then(json => {
-    data = json;
+async function loadData() {
+    let { data: categories, error: categoriesError } = await supabaseClient
+        .from('categories')
+        .select('*');
+
+    let { data: items, error: itemsError } = await supabaseClient
+        .from('items')
+        .select('*');
+
+    if (categoriesError || itemsError) {
+        console.error(categoriesError || itemsError);
+        return;
+    }
+
+    data = {
+        categories: categories.map(category => ({
+            ...category,
+            items: items.filter(item => item.category_id === category.id)
+        }))
+    };
+
     renderCategories();
     selectCategory("all");
-  });
+}
+
+loadData();
 
 // ===== CATEGORIES =====
 function renderCategories() {
@@ -187,15 +206,205 @@ function clearSelection() {
 resetBtn.onclick = clearSelection;
 function toggleParentMode() {
   isParentMode = !isParentMode;
-
   document.body.classList.toggle("parent-mode", isParentMode);
-
-  sentenceEl.textContent = isParentMode
-    ? "Rodičovský režim"
-    : "";
 
   if (isParentMode) {
     speak("Rodičovský režim");
+    loadParentModeData();
+  } else {
+    loadData(); // Reload main app data
   }
 }
+
+// ===== PARENT MODE =====
+const parentModeControls = document.querySelector('.parent-mode-controls');
+const closeParentModeBtn = document.querySelector('.close-parent-mode');
+const categoryForm = document.getElementById('category-form');
+const itemForm = document.getElementById('item-form');
+const categoryList = document.getElementById('category-list');
+const itemList = document.getElementById('item-list');
+const categoryInput = itemForm.querySelector('select[name="category_id"]');
+const deleteCategoryBtn = document.getElementById('delete-category');
+const deleteItemBtn = document.getElementById('delete-item');
+
+let parentCategories = [];
+let parentItems = [];
+let selectedCategoryId = null;
+let selectedItemId = null;
+
+async function loadParentModeData() {
+    const { data: categories, error: catError } = await supabaseClient.from('categories').select('*').order('label');
+    if (catError) return console.error(catError);
+    parentCategories = categories;
+
+    const { data: items, error: itemError } = await supabaseClient.from('items').select('*').order('text');
+    if (itemError) return console.error(itemError);
+    parentItems = items;
+
+    renderParentCategories();
+    renderParentItems();
+    updateCategoryDropdown();
+}
+
+function renderParentCategories() {
+    categoryList.innerHTML = '';
+    parentCategories.forEach(cat => {
+        if (cat.id === 'all') return;
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.textContent = `${cat.icon} ${cat.label}`;
+        div.dataset.id = cat.id;
+        div.onclick = () => selectParentCategory(cat);
+        if (cat.id === selectedCategoryId) {
+            div.classList.add('selected');
+        }
+        categoryList.appendChild(div);
+    });
+}
+
+function renderParentItems() {
+    itemList.innerHTML = '';
+    parentItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.textContent = `${item.icon || ''} ${item.text}`;
+        div.dataset.id = item.id;
+        div.onclick = () => selectParentItem(item);
+        if (item.id === selectedItemId) {
+            div.classList.add('selected');
+        }
+        itemList.appendChild(div);
+    });
+}
+
+function updateCategoryDropdown() {
+    categoryInput.innerHTML = '';
+    parentCategories.forEach(cat => {
+        if (cat.id === 'all') return;
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.label;
+        categoryInput.appendChild(option);
+    });
+}
+
+function selectParentCategory(cat) {
+    selectedCategoryId = cat.id;
+    categoryForm.querySelector('[name="id"]').value = cat.id;
+    categoryForm.querySelector('[name="label"]').value = cat.label;
+    categoryForm.querySelector('[name="icon"]').value = cat.icon;
+    categoryForm.querySelector('[name="mode"]').value = cat.mode;
+    deleteCategoryBtn.style.display = 'block';
+    renderParentCategories();
+}
+
+function selectParentItem(item) {
+    selectedItemId = item.id;
+    itemForm.querySelector('[name="id"]').value = item.id;
+    itemForm.querySelector('[name="category_id"]').value = item.category_id;
+    itemForm.querySelector('[name="text"]').value = item.text;
+    itemForm.querySelector('[name="icon"]').value = item.icon || '';
+    deleteItemBtn.style.display = 'block';
+    renderParentItems();
+}
+
+closeParentModeBtn.onclick = () => toggleParentMode();
+
+categoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(categoryForm);
+    const id = formData.get('id') || undefined;
+    const record = {
+        label: formData.get('label'),
+        icon: formData.get('icon'),
+        mode: formData.get('mode'),
+    };
+
+    if (id) {
+        // Update
+        const { error } = await supabaseClient.from('categories').update(record).eq('id', id);
+        if (error) return console.error(error);
+    } else {
+        // Create
+        record.id = record.label.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const { error } = await supabaseClient.from('categories').insert(record);
+        if (error) return console.error(error);
+    }
+
+    categoryForm.reset();
+    deleteCategoryBtn.style.display = 'none';
+    selectedCategoryId = null;
+    loadParentModeData();
+});
+
+deleteCategoryBtn.onclick = async () => {
+    if (!selectedCategoryId || !confirm('Opravdu smazat kategorii?')) return;
+    
+    // Items in this category will be deleted by CASCADE constraint
+    const { error } = await supabaseClient.from('categories').delete().eq('id', selectedCategoryId);
+    if (error) return console.error(error);
+
+    categoryForm.reset();
+    deleteCategoryBtn.style.display = 'none';
+    selectedCategoryId = null;
+    loadParentModeData();
+};
+
+itemForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(itemForm);
+    const id = formData.get('id') || undefined;
+    const imageFile = formData.get('image');
+
+    const record = {
+        category_id: formData.get('category_id'),
+        text: formData.get('text'),
+        icon: formData.get('icon'),
+    };
+
+    if (imageFile && imageFile.size > 0) {
+        const fileName = `${Date.now()}_${imageFile.name}`;
+        const { data, error: uploadError } = await supabaseClient.storage
+            .from('images')
+            .upload(fileName, imageFile);
+
+        if (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            return;
+        }
+        
+        const { data: { publicUrl } } = supabaseClient.storage.from('images').getPublicUrl(fileName);
+        record.image_url = publicUrl;
+        record.icon = ''; // Clear icon if image is used
+    }
+
+    if (id) {
+        // Update
+        const { error } = await supabaseClient.from('items').update(record).eq('id', id);
+        if (error) return console.error(error);
+    } else {
+        // Create
+        record.id = record.text.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const { error } = await supabaseClient.from('items').insert(record);
+        if (error) return console.error(error);
+    }
+
+    itemForm.reset();
+    deleteItemBtn.style.display = 'none';
+    selectedItemId = null;
+    loadParentModeData();
+});
+
+deleteItemBtn.onclick = async () => {
+    if (!selectedItemId || !confirm('Opravdu smazat položku?')) return;
+
+    const { error } = await supabaseClient.from('items').delete().eq('id', selectedItemId);
+    if (error) return console.error(error);
+
+    itemForm.reset();
+    deleteItemBtn.style.display = 'none';
+    selectedItemId = null;
+    loadParentModeData();
+};
+
 

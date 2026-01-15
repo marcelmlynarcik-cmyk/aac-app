@@ -16,6 +16,44 @@
 <body>
   <div class="app">
 
+    <!-- PARENT MODE -->
+    <div class="parent-mode-controls">
+        <div class="parent-mode-header">
+            <h2>Rodičovský režim</h2>
+            <button class="close-parent-mode">Zavřít</button>
+        </div>
+
+        <div class="parent-section">
+            <h3>Kategorie</h3>
+            <form id="category-form">
+                <input type="hidden" name="id">
+                <input type="text" name="label" placeholder="Název kategorie" required>
+                <input type="text" name="icon" placeholder="Ikona (emoji)" required>
+                <select name="mode" required>
+                    <option value="want">Chci/Nechci</option>
+                    <option value="statement">Tvrzení</option>
+                </select>
+                <button type="submit">Uložit kategorii</button>
+                <button type="button" id="delete-category" class="delete-btn" style="display: none;">Smazat</button>
+            </form>
+            <div id="category-list"></div>
+        </div>
+
+        <div class="parent-section">
+            <h3>Položky</h3>
+            <form id="item-form">
+                <input type="hidden" name="id">
+                <select name="category_id" required></select>
+                <input type="text" name="text" placeholder="Text položky" required>
+                <input type="text" name="icon" placeholder="Ikona (emoji)">
+                <input type="file" name="image" accept="image/*">
+                <button type="submit">Uložit položku</button>
+                <button type="button" id="delete-item" class="delete-btn" style="display: none;">Smazat</button>
+            </form>
+            <div id="item-list"></div>
+        </div>
+    </div>
+
     <!-- VETA -->
     <div class="sentence"></div>
 
@@ -44,6 +82,8 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -101,7 +101,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Vertically center */
+  aspect-ratio: 1 / 1;     /* Make it square */
   font-size: 36px;
+  overflow: hidden;        /* Hide overflow */
 }
 
 .card span {
@@ -112,6 +115,13 @@ body {
 .card.active {
   outline: 4px solid #007aff;
   background: #eaf3ff;
+}
+
+.card img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background-color: #f0f0f0; /* Placeholder color */
 }
 
 /* FOOTER */

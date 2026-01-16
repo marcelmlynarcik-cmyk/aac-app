@@ -24,6 +24,18 @@ function cancelPress() {
   clearTimeout(pressTimer);
 }
 
+// Helper function to sanitize filenames for Supabase Storage
+function sanitizeFilename(filename) {
+    // Replace non-alphanumeric, non-underscore, non-hyphen, non-dot characters with a hyphen
+    // and replace multiple hyphens with a single hyphen, trim leading/trailing hyphens.
+    // Convert to lowercase.
+    return filename
+        .replace(/[^a-zA-Z0-9_.-]/g, '-')
+        .replace(/--+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase();
+}
+
 const categoriesEl = document.getElementById("categories");
 const gridEl = document.getElementById("grid");
 
@@ -117,7 +129,11 @@ function renderGrid() {
   items.forEach(item => {
     const card = document.createElement("button");
     card.className = "card";
-    card.innerHTML = `${item.icon}<span>${item.text}</span>`;
+    if (item.image_url) {
+        card.innerHTML = `<img src="${item.image_url}" alt="${item.text}"><span>${item.text}</span>`;
+    } else {
+        card.innerHTML = `${item.icon}<span>${item.text}</span>`;
+    }
 
     card.onclick = () => onItemClick(item, card);
     gridEl.appendChild(card);
@@ -267,7 +283,20 @@ function renderParentItems() {
     parentItems.forEach(item => {
         const div = document.createElement('div');
         div.className = 'list-item';
-        div.textContent = `${item.icon || ''} ${item.text}`;
+        
+        if (item.image_url) {
+            const img = document.createElement('img');
+            img.src = item.image_url;
+            img.alt = item.text;
+            img.style.height = '1.5em';
+            img.style.verticalAlign = 'middle';
+            img.style.marginRight = '0.5em';
+            div.appendChild(img);
+            div.appendChild(document.createTextNode(item.text));
+        } else {
+            div.textContent = `${item.icon || ''} ${item.text}`;
+        }
+        
         div.dataset.id = item.id;
         div.onclick = () => selectParentItem(item);
         if (item.id === selectedItemId) {
@@ -363,18 +392,26 @@ itemForm.addEventListener('submit', async (e) => {
     };
 
     if (imageFile && imageFile.size > 0) {
-        const fileName = `${Date.now()}_${imageFile.name}`;
-        const { data, error: uploadError } = await supabaseClient.storage
+        const fileName = `${Date.now()}_${sanitizeFilename(imageFile.name)}`;
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
             .from('images')
             .upload(fileName, imageFile);
 
         if (uploadError) {
             console.error('Error uploading image:', uploadError);
+            alert(`Chyba při nahrávání obrázku: ${uploadError.message}`);
             return;
         }
         
-        const { data: { publicUrl } } = supabaseClient.storage.from('images').getPublicUrl(fileName);
-        record.image_url = publicUrl;
+        const { data: urlData } = supabaseClient.storage.from('images').getPublicUrl(uploadData.path);
+        if (!urlData || !urlData.publicUrl) {
+            const errorMessage = 'Nepodařilo se získat veřejnou URL obrázku.';
+            console.error(errorMessage);
+            alert(errorMessage);
+            return;
+        }
+
+        record.image_url = urlData.publicUrl;
         record.icon = ''; // Clear icon if image is used
     }
 

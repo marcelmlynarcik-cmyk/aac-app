@@ -5,24 +5,7 @@ let mode = null;
 let selectedItem = null;
 
 const sentenceEl = document.querySelector(".sentence");
-let pressTimer = null;
 
-sentenceEl.addEventListener("touchstart", startPress);
-sentenceEl.addEventListener("mousedown", startPress);
-
-sentenceEl.addEventListener("touchend", cancelPress);
-sentenceEl.addEventListener("mouseup", cancelPress);
-sentenceEl.addEventListener("mouseleave", cancelPress);
-
-function startPress() {
-  pressTimer = setTimeout(() => {
-    toggleParentMode();
-  }, 2000); // 2 sekundy
-}
-
-function cancelPress() {
-  clearTimeout(pressTimer);
-}
 
 // Helper function to sanitize filenames for Supabase Storage
 function sanitizeFilename(filename) {
@@ -44,6 +27,8 @@ const btnNechci = document.querySelector(".choice.no");
 const quickYes = document.querySelector(".quick.yes");
 const quickNo = document.querySelector(".quick.no");
 const resetBtn = document.querySelector(".reset");
+const parentModeBtn = document.querySelector(".parent-mode-btn");
+parentModeBtn.onclick = toggleParentMode;
 
 // ===== SPEAK =====
 function speak(text, delay = 300) {
@@ -247,6 +232,7 @@ let parentCategories = [];
 let parentItems = [];
 let selectedCategoryId = null;
 let selectedItemId = null;
+let isSubmittingItem = false;
 
 async function loadParentModeData() {
     const { data: categories, error: catError } = await supabaseClient.from('categories').select('*').order('label');
@@ -381,78 +367,100 @@ deleteCategoryBtn.onclick = async () => {
 
 itemForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const formData = new FormData(itemForm);
-    const id = formData.get('id') || undefined;
-    const imageFile = formData.get('image');
-
-    const record = {
-        category_id: formData.get('category_id'),
-        text: formData.get('text'),
-        icon: formData.get('icon'),
-    };
-
-    if (!record.text) {
-        alert('Text položky nesmí být prázdný.');
+    if (isSubmittingItem) {
+        console.log('Submission in progress, please wait.');
         return;
     }
+    isSubmittingItem = true;
+    const submitButton = itemForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Ukládání...';
 
-    if (imageFile && imageFile.size > 0) {
-        const fileName = `${Date.now()}_${sanitizeFilename(imageFile.name)}`;
-        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-            .from('images')
-            .upload(fileName, imageFile);
+    try {
+        const formData = new FormData(itemForm);
+        const id = formData.get('id') || undefined;
+        const imageFile = formData.get('image');
 
-        if (uploadError) {
-            console.error('Error uploading image:', uploadError);
-            alert(`Chyba při nahrávání obrázku: ${uploadError.message}`);
+        const record = {
+            category_id: formData.get('category_id'),
+            text: formData.get('text'),
+            icon: formData.get('icon'),
+        };
+
+        if (!record.text) {
+            alert('Text položky nesmí být prázdný.');
             return;
         }
-        
-        const { data: urlData } = supabaseClient.storage.from('images').getPublicUrl(uploadData.path);
-        if (!urlData || !urlData.publicUrl) {
-            const errorMessage = 'Nepodařilo se získat veřejnou URL obrázku.';
-            console.error(errorMessage);
-            alert(errorMessage);
-            return;
+
+        if (imageFile && imageFile.size > 0) {
+            const fileName = `${Date.now()}_${sanitizeFilename(imageFile.name)}`;
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                .from('images')
+                .upload(fileName, imageFile);
+
+            if (uploadError) {
+                console.error('Error uploading image:', uploadError);
+                alert(`Chyba při nahrávání obrázku: ${uploadError.message}`);
+                return;
+            }
+            
+            const { data: urlData } = supabaseClient.storage.from('images').getPublicUrl(uploadData.path);
+            if (!urlData || !urlData.publicUrl) {
+                const errorMessage = 'Nepodařilo se získat veřejnou URL obrázku.';
+                console.error(errorMessage);
+                alert(errorMessage);
+                return;
+            }
+
+            record.image_url = urlData.publicUrl;
+            record.icon = '';
         }
 
-        record.image_url = urlData.publicUrl;
-        record.icon = ''; // Clear icon if image is used
+        if (id) {
+            const { error } = await supabaseClient.from('items').update(record).eq('id', id);
+            if (error) {
+                console.error('Error updating item:', error);
+                alert(`Chyba při ukládání položky: ${error.message}`);
+                return;
+            }
+        } else {
+            const safeTextId = record.text.toLowerCase().replace(/[^a-z0-9]/g, '');
+            record.id = `${safeTextId}-${Math.random().toString(36).substring(2, 9)}`;
+            const { error } = await supabaseClient.from('items').insert(record);
+            if (error) {
+                console.error('Error creating item:', error);
+                alert(`Chyba při vytváření položky: ${error.message}`);
+                return;
+            }
+        }
+
+        itemForm.reset();
+        deleteItemBtn.style.display = 'none';
+        selectedItemId = null;
+        loadParentModeData();
+    } finally {
+        isSubmittingItem = false;
+        submitButton.disabled = false;
+        submitButton.textContent = 'Uložit položku';
     }
-
-    if (id) {
-        // Update
-        const { error } = await supabaseClient.from('items').update(record).eq('id', id);
-        if (error) {
-            console.error('Error updating item:', error);
-            alert(`Chyba při ukládání položky: ${error.message}`);
-            return;
-        }
-    } else {
-        // Create
-        const safeTextId = record.text.toLowerCase().replace(/[^a-z0-9]/g, '');
-        record.id = `${safeTextId}-${Math.random().toString(36).substring(2, 9)}`;
-        const { error } = await supabaseClient.from('items').insert(record);
-        if (error) {
-            console.error('Error creating item:', error);
-            alert(`Chyba při vytváření položky: ${error.message}`);
-            return;
-        }
-    }
-
-    itemForm.reset();
-    deleteItemBtn.style.display = 'none';
-    selectedItemId = null;
-    loadParentModeData();
 });
 
 deleteItemBtn.onclick = async () => {
     if (!selectedItemId || !confirm('Opravdu smazat položku?')) return;
 
-    // Find the item in the local cache to get its details
-    const itemToDelete = parentItems.find(item => item.id === selectedItemId);
+    // To ensure we have the correct image_url, fetch the item directly from the database
+    const { data: items, error: fetchError } = await supabaseClient
+        .from('items')
+        .select('image_url')
+        .eq('id', selectedItemId);
 
-    // First, delete the database record
+    if (fetchError) {
+        console.error('Could not fetch item to delete:', fetchError);
+        // We can still attempt to delete, but we won't be able to remove the image.
+    }
+    const itemToDelete = items && items.length > 0 ? items[0] : null;
+
+    // Now, delete the database record
     const { error: dbError } = await supabaseClient.from('items').delete().eq('id', selectedItemId);
 
     if (dbError) {
@@ -461,7 +469,7 @@ deleteItemBtn.onclick = async () => {
         return;
     }
 
-    // If database deletion was successful, and there was an image, delete it from storage
+    // If database deletion was successful, and we found an image_url, delete the image from storage
     if (itemToDelete && itemToDelete.image_url) {
         try {
             const fileName = itemToDelete.image_url.substring(itemToDelete.image_url.lastIndexOf('/') + 1);
@@ -471,7 +479,6 @@ deleteItemBtn.onclick = async () => {
                     .remove([fileName]);
                 
                 if (storageError) {
-                    // Log this error, but don't block the user, as the main record is already gone.
                     console.error('Failed to delete image from storage:', storageError);
                 }
             }

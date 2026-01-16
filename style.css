@@ -14,6 +14,7 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 12px;
+  position: relative; /* Add this for positioning context */
 }
 
 /* VETA */
@@ -115,6 +116,22 @@ body {
 .card.active {
   outline: 4px solid #007aff;
   background: #eaf3ff;
+}
+
+.parent-mode-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  padding: 10px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.parent-mode-btn:hover {
+  opacity: 1;
 }
 
 .card img {

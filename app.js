@@ -391,6 +391,11 @@ itemForm.addEventListener('submit', async (e) => {
         icon: formData.get('icon'),
     };
 
+    if (!record.text) {
+        alert('Text položky nesmí být prázdný.');
+        return;
+    }
+
     if (imageFile && imageFile.size > 0) {
         const fileName = `${Date.now()}_${sanitizeFilename(imageFile.name)}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
@@ -418,12 +423,21 @@ itemForm.addEventListener('submit', async (e) => {
     if (id) {
         // Update
         const { error } = await supabaseClient.from('items').update(record).eq('id', id);
-        if (error) return console.error(error);
+        if (error) {
+            console.error('Error updating item:', error);
+            alert(`Chyba při ukládání položky: ${error.message}`);
+            return;
+        }
     } else {
         // Create
-        record.id = record.text.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const safeTextId = record.text.toLowerCase().replace(/[^a-z0-9]/g, '');
+        record.id = `${safeTextId}-${Math.random().toString(36).substring(2, 9)}`;
         const { error } = await supabaseClient.from('items').insert(record);
-        if (error) return console.error(error);
+        if (error) {
+            console.error('Error creating item:', error);
+            alert(`Chyba při vytváření položky: ${error.message}`);
+            return;
+        }
     }
 
     itemForm.reset();
@@ -435,9 +449,38 @@ itemForm.addEventListener('submit', async (e) => {
 deleteItemBtn.onclick = async () => {
     if (!selectedItemId || !confirm('Opravdu smazat položku?')) return;
 
-    const { error } = await supabaseClient.from('items').delete().eq('id', selectedItemId);
-    if (error) return console.error(error);
+    // Find the item in the local cache to get its details
+    const itemToDelete = parentItems.find(item => item.id === selectedItemId);
 
+    // First, delete the database record
+    const { error: dbError } = await supabaseClient.from('items').delete().eq('id', selectedItemId);
+
+    if (dbError) {
+        console.error('Error deleting item from database:', dbError);
+        alert(`Chyba při mazání položky: ${dbError.message}`);
+        return;
+    }
+
+    // If database deletion was successful, and there was an image, delete it from storage
+    if (itemToDelete && itemToDelete.image_url) {
+        try {
+            const fileName = itemToDelete.image_url.substring(itemToDelete.image_url.lastIndexOf('/') + 1);
+            if (fileName) {
+                const { error: storageError } = await supabaseClient.storage
+                    .from('images')
+                    .remove([fileName]);
+                
+                if (storageError) {
+                    // Log this error, but don't block the user, as the main record is already gone.
+                    console.error('Failed to delete image from storage:', storageError);
+                }
+            }
+        } catch (e) {
+            console.error('Could not determine image filename for deletion:', e);
+        }
+    }
+
+    // Reset UI
     itemForm.reset();
     deleteItemBtn.style.display = 'none';
     selectedItemId = null;

@@ -148,24 +148,18 @@ btnChci.onclick = () => {
   updateSentence();
 };
 
-btnNechci.onclick = () => {
-  mode = "nechci";
-  btnNechci.classList.add("active");
-  btnChci.classList.remove("active");
-  updateSentence();
-};
-
 // ===== QUICK ANSWERS =====
 quickYes.onclick = () => {
   clearSelection();
-  sentenceEl.textContent = "Ano, chci";
+  sentenceEl.textContent = "Ano";
   speak(sentenceEl.textContent);
   quickYes.classList.add("active");
 };
 
+
 quickNo.onclick = () => {
   clearSelection();
-  sentenceEl.textContent = "Ne, nechci";
+  sentenceEl.textContent = "Ne";
   speak(sentenceEl.textContent);
   quickNo.classList.add("active");
 };

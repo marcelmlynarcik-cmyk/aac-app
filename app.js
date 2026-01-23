@@ -135,8 +135,14 @@ function onItemClick(item, card) {
   if (item.mode === "statement") {
     sentenceEl.textContent = item.text;
     speak(item.text);
-  } else {
+    return;
+  }
+
+  if (mode) {
     updateSentence();
+  } else {
+    sentenceEl.textContent = item.text;
+    speak(item.text);
   }
 }
 

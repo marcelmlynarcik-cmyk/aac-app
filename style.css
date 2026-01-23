@@ -97,25 +97,56 @@ body {
 .card {
   background: white;
   border-radius: 14px;
-  padding: 10px;
   border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Vertically center */
-  aspect-ratio: 1 / 1;     /* Make it square */
-  font-size: 36px;
-  overflow: hidden;        /* Hide overflow */
-}
-
-.card span {
-  font-size: 15px;
-  margin-top: 6px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
 }
 
 .card.active {
   outline: 4px solid #007aff;
   background: #eaf3ff;
+}
+
+/* Icon card specific styles */
+.icon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  padding: 16px;
+}
+
+.icon-card span {
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Photo card specific styles */
+.photo-card {
+  padding: 0;
+  background: #eee;
+}
+
+.photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-card span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: white;
+  padding: 20px 10px 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
 }
 
 .parent-mode-btn {
@@ -132,13 +163,6 @@ body {
 
 .parent-mode-btn:hover {
   opacity: 1;
-}
-
-.card img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  background-color: #f0f0f0; /* Placeholder color */
 }
 
 /* FOOTER */

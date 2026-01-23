@@ -115,8 +115,10 @@ function renderGrid() {
     const card = document.createElement("button");
     card.className = "card";
     if (item.image_url) {
+        card.classList.add("photo-card");
         card.innerHTML = `<img src="${item.image_url}" alt="${item.text}"><span>${item.text}</span>`;
     } else {
+        card.classList.add("icon-card");
         card.innerHTML = `${item.icon}<span>${item.text}</span>`;
     }
 
